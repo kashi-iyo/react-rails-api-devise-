@@ -1,11 +1,32 @@
 import React from 'react'
-import PropTypes from 'prop-type'
+import PropTypes from 'prop-types'
+
+import axios from 'axios'
+import setAxiosHeaders from './AxiosHeaders'
 
 class TodoItem extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       complete: this.props.todoItem.complete,
+    }
+
+    this.handleDestroy = this.handleDestroy.bind(this)
+    this.path = `/api/v1/todo_items/${this.props.todoItem.id}`
+  }
+
+  handleDestroy() {
+    setAxiosHeaders()
+
+    const confirmation = confirm('本当に削除しますか')
+    if (confirmation) {
+      axios.delete(this.path)
+      .then(response => {
+        this.props.getTodoItems()
+      })
+      .catch(error => {
+        console.log(error)
+      })
     }
   }
 
@@ -61,7 +82,7 @@ class TodoItem extends React.Component {
               Complete?
             </label>
           </div>
-          <button className="btn btn-outline-danger">Delete</button>
+          <button onClick={this.handleDestroy} className="btn btn-outline-danger">Delete</button>
         </td>
       </tr>
     )
@@ -70,6 +91,7 @@ class TodoItem extends React.Component {
 
 export default TodoItem
 
-TodoItem.propType = {
+TodoItem.propTypes = {
   todoItem: PropTypes.object.isRequired,
+  getTodoItems: PropTypes.func.isRequired
 }
