@@ -31,14 +31,15 @@ class TodoItem extends React.Component {
      })
      this.updateTodoItem()
    }
+   
    updateTodoItem = _.debounce(() => {
      setAxiosHeaders()
      axios.put(this.path, { todo_item: {
                                title: this.inputRef.current.value,
                                complete: this.completedRef.current.checked } })
-                               .then(response => {})
-                               .catch(error => {console.log(error)})
-  }, 1000)
+                               .then(() => { this.props.clearErrors() })
+                               .catch(error => { this.props.handleErrors(error) })
+  }, 500)
 
   handleDestroy() {
     setAxiosHeaders()
@@ -123,5 +124,6 @@ export default TodoItem
 TodoItem.propTypes = {
   todoItem: PropTypes.object.isRequired,
   getTodoItems: PropTypes.func.isRequired,
-  hideCompletedTodoItems: PropTypes.bool.isRequired
+  hideCompletedTodoItems: PropTypes.bool.isRequired,
+  clearErrors: PropTypes.func.isRequired
 }
