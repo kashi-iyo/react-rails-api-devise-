@@ -18,4 +18,5 @@ Turbolinks.start()
 
 require("./components/TodoApp");
 require('bootstrap')
+require("./rails-ujs.js");
 import 'bootstrap/dist/css/bootstrap'
